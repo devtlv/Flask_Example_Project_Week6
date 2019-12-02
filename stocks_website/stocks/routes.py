@@ -3,7 +3,7 @@ from flask import Blueprint, render_template
 
 from stocks_website.exchanges import get_stock_exchanges
 
-stocks_routes = Blueprint('stocks', __name__, template_folder='templates/')
+stocks_routes = Blueprint('stocks', __name__, template_folder='templates')
 
 
 @stocks_routes.route('/exchanges/<exchange>')
@@ -20,7 +20,7 @@ def exchanges(exchange):
     if 'message' in search_data and 'data' not in search_data:
         raise ValueError(search_data['message'])
     print(search_data)
-    return render_template('exchanges.html',
+    return render_template('stocks/exchanges.html',
                            stock_exchanges=stock_exchanges,
                            search_data=search_data['data'])
 
