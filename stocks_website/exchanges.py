@@ -3,6 +3,7 @@ from __future__ import annotations
 import dataclasses
 import typing
 
+from flask import current_app as app
 import pytz
 import requests
 
@@ -51,10 +52,13 @@ class StockExchange:
         )
 
 
-def get_stock_exchanges() -> typing.List[StockExchange]:
+def get_stock_exchanges(api_token: typing.Union[str, None] = None) -> typing.List[StockExchange]:
+    if not api_token:
+        api_token = app.config.world_trading_data_api_token
+
     stock_exchanges_response = requests.get('https://api.worldtradingdata.com/api/v1/exchange_list',
                                             {
-                                                'api_token': 'CfKzuYYPqeekR95Ud2Hime7E8cMxz6FgspmUWwbDQiavYJ0Tk55fEHAHpHeN'
+                                                'api_token': api_token
                                             })
     stock_exchanges_response.raise_for_status()
     stock_exchanges = stock_exchanges_response.json()
