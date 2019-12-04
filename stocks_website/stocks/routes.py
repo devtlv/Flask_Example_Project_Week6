@@ -1,6 +1,5 @@
 import requests
 from flask import Blueprint, render_template, current_app as app
-from stocks_website.exchanges import get_stock_exchanges
 
 stocks_routes = Blueprint('stocks', __name__, template_folder='templates')
 

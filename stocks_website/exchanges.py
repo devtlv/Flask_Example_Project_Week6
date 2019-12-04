@@ -7,6 +7,8 @@ from flask import current_app as app
 import pytz
 import requests
 
+from stocks_website.world_trading_data import WTDRepository
+
 
 @dataclasses.dataclass()
 class StockExchange:
@@ -52,18 +54,12 @@ class StockExchange:
         )
 
 
-def get_stock_exchanges(api_token: typing.Union[str, None] = None) -> typing.List[StockExchange]:
-    if not api_token:
-        api_token = app.config.world_trading_data_api_token
+class StockExchangesRepository(WTDRepository):
+    def get_stock_exchanges(self) -> typing.List[StockExchange]:
+        stock_exchanges = self.get('exchange_list')
 
-    stock_exchanges_response = requests.get('https://api.worldtradingdata.com/api/v1/exchange_list',
-                                            {
-                                                'api_token': api_token
-                                            })
-    stock_exchanges_response.raise_for_status()
-    stock_exchanges = stock_exchanges_response.json()
-    if 'message' in stock_exchanges:
-        raise ValueError(stock_exchanges['message'])
-    return [
-        StockExchange.create_from_wdt(symbol, **data) for symbol, data in stock_exchanges.items()
-    ]
+        if 'message' in stock_exchanges:
+            raise ValueError(stock_exchanges['message'])
+        return [
+            StockExchange.create_from_wdt(symbol, **data) for symbol, data in stock_exchanges.items()
+        ]
