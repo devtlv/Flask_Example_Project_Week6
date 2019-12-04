@@ -3,9 +3,7 @@ from __future__ import annotations
 import dataclasses
 import typing
 
-from flask import current_app as app
 import pytz
-import requests
 
 from stocks_website.world_trading_data import WTDRepository
 

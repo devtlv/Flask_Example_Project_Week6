@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block page_name %}Exchanges{% page_name %}
+{% block page_name %}Exchanges{% endblock %}
 
 {% block content %}
 <h1>EXCHANGE PAGE</h1>
@@ -9,6 +9,7 @@
 
 <div class="container-fluid">
     <div class="row">
+        {% for stock in search_data %}
         <div class="card m-4" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title text-center">{{stock.name}}</h5>
@@ -28,7 +29,7 @@
                     </div>
                     <div class="row">
                         <div class="col">Exchange:</div>
-                        <div class="col">{{stock.stock_exchange_short}}</div>
+                        <div class="col">{{stock.stock_exchange_symbol}}</div>
                     </div>
                     <div class="row">
                         <div class="col text-center">
