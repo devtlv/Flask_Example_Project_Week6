@@ -3,3 +3,5 @@ Flask-Bootstrap4>=4.0.0
 Flask-WTF>=0.14.2
 requests>=2.22.0
 pytz
+psycopg2-binary>=2.8.4
+flask-sqlalchemy>=2.4.1

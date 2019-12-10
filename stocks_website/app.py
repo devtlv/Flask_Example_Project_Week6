@@ -1,5 +1,8 @@
+import os
+
 from flask import Flask
 from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
 
 from stocks_website import routes
 from stocks_website.exchanges import StockExchangesRepository
@@ -13,6 +16,7 @@ def create_app():
     app.config.world_trading_data_api_token = 'CfKzuYYPqeekR95Ud2Hime7E8cMxz6FgspmUWwbDQiavYJ0Tk55fEHAHpHeN'
     repository = StockExchangesRepository(api_token=app.config.world_trading_data_api_token)
     app.config.stock_exchanges = repository.get_stock_exchanges()
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://postgres@localhost/postgres')
 
     Bootstrap(app)
 
@@ -20,6 +24,7 @@ def create_app():
 
 
 app = create_app()
+db = SQLAlchemy(app)
 
 app.register_blueprint(routes.main_routes)
 app.register_blueprint(stocks_routes.stocks_routes)
