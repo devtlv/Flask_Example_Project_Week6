@@ -5,9 +5,9 @@ from uuid import UUID
 
 import typing
 
-from stocks_website.app import db
+from stocks_website.database import db
 
-from sqlalchemy.dialects.postgresql import UUID as UUIDColumn
+from sqlalchemy.dialects.postgresql import UUID as UUIDColumn, UUID
 
 
 @dataclasses.dataclass()

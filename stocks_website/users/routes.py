@@ -1,5 +1,7 @@
-from flask import Blueprint, flash, render_template, request, current_app as app
+from flask import Blueprint, flash, render_template, request, current_app as app, redirect
+from sqlalchemy import func
 
+from stocks_website.users.models import User
 from stocks_website.users.forms import LoginForm
 from stocks_website.forms import SearchForm
 
@@ -11,8 +13,11 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        if False:
-            pass
+        user = User.query.filter(email=form.email,
+                                 password=func.digest(form.password,
+                                                      'sha256')).first()
+        if user:
+            return redirect('/')
         else:
             flash('Wrong username or password.', 'error')
     elif request.method == 'POST':

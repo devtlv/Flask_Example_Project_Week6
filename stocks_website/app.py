@@ -2,9 +2,9 @@ import os
 
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
 
 from stocks_website import routes
+from stocks_website.database import db
 from stocks_website.exchanges import StockExchangesRepository
 from stocks_website.stocks import routes as stocks_routes
 from stocks_website.users import routes as users_routes
@@ -18,13 +18,17 @@ def create_app():
     app.config.stock_exchanges = repository.get_stock_exchanges()
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://postgres@localhost/postgres')
 
+    from stocks_website.users.models import User
+    db.init_app(app)
+    with app.test_request_context():
+        db.create_all()
+
     Bootstrap(app)
 
     return app
 
 
 app = create_app()
-db = SQLAlchemy(app)
 
 app.register_blueprint(routes.main_routes)
 app.register_blueprint(stocks_routes.stocks_routes)
