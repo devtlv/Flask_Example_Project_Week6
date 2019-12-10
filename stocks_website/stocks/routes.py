@@ -1,4 +1,3 @@
-import requests
 from flask import Blueprint, render_template, current_app as app
 
 from stocks_website.forms import SearchForm
