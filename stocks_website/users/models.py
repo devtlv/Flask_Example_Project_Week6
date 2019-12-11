@@ -38,3 +38,12 @@ class User(db.Model):
     last_name = db.Column(db.String(120), nullable=False)
     password = db.Column(db.Binary(), nullable=False)
     country = db.Column(db.String(120), nullable=True)
+    addresses = db.relationship('Address')
+
+
+class Address(db.Model):
+    id = db.Column(UUIDColumn, primary_key=True)
+    street_address = db.Column(db.String(255), nullable=False)
+    city = db.Column(db.String(255), nullable=False)
+    zipcode = db.Column(db.String(30), nullable=True)
+    user_id = db.Column(UUIDColumn, db.ForeignKey('user.id'))
