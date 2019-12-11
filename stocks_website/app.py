@@ -18,6 +18,7 @@ def create_app():
     repository = StockExchangesRepository(api_token=app.config.world_trading_data_api_token)
     app.config.stock_exchanges = repository.get_stock_exchanges()
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://postgres@localhost/postgres')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
     migrate.init_app(app, db)

@@ -5,9 +5,11 @@ from uuid import UUID
 
 import typing
 
+from sqlalchemy import func
+
 from stocks_website.database import db
 
-from sqlalchemy.dialects.postgresql import UUID as UUIDColumn, UUID
+from sqlalchemy.dialects.postgresql import UUID as UUIDColumn, UUID, ENUM
 
 
 @dataclasses.dataclass()
@@ -32,17 +34,20 @@ class UserDTO:
 
 
 class User(db.Model):
-    id = db.Column(UUIDColumn, primary_key=True)
+    id = db.Column(UUIDColumn, primary_key=True, server_default=func.uuid_generate_v4())
     email = db.Column(db.String(120), unique=True, nullable=False)
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     password = db.Column(db.Binary(), nullable=False)
     country = db.Column(db.String(120), nullable=True)
+    sex = db.Column(ENUM("female", "male", "other", name="sex_enum", create_type=True),
+                    nullable=False,
+                    default='other')
     addresses = db.relationship('Address')
 
 
 class Address(db.Model):
-    id = db.Column(UUIDColumn, primary_key=True)
+    id = db.Column(UUIDColumn, primary_key=True, server_default=func.uuid_generate_v4())
     street_address = db.Column(db.String(255), nullable=False)
     city = db.Column(db.String(255), nullable=False)
     zipcode = db.Column(db.String(30), nullable=True)
