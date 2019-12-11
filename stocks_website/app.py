@@ -4,13 +4,14 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 
 from stocks_website import routes
-from stocks_website.database import db
+from stocks_website.database import db, migrate
 from stocks_website.exchanges import StockExchangesRepository
 from stocks_website.stocks import routes as stocks_routes
 from stocks_website.users import routes as users_routes
 
 
 def create_app():
+    """App factory."""
     app = Flask(__name__)
     app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     app.config.world_trading_data_api_token = 'CfKzuYYPqeekR95Ud2Hime7E8cMxz6FgspmUWwbDQiavYJ0Tk55fEHAHpHeN'
@@ -18,10 +19,8 @@ def create_app():
     app.config.stock_exchanges = repository.get_stock_exchanges()
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://postgres@localhost/postgres')
 
-    from stocks_website.users.models import User
     db.init_app(app)
-    with app.test_request_context():
-        db.create_all()
+    migrate.init_app(app, db)
 
     Bootstrap(app)
 
