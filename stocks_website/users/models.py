@@ -37,3 +37,4 @@ class User(db.Model):
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     password = db.Column(db.Binary(), nullable=False)
+    country = db.Column(db.String(120), nullable=True)
